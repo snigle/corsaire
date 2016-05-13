@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context="eu.snigle.corsaire.navigation.NavigationActivity">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/my_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="?attr/colorPrimaryDark"
+        android:elevation="4dp"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+        android:focusableInTouchMode="true"
+
+        />
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:id="@+id/direction_layout"
+        android:background="@color/colorPrimary"
+        android:layout_below="@id/my_toolbar"
+        android:clickable="true"
+        android:onClick="details">
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="120dp"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:layout_gravity="center_horizontal">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:id="@+id/image_direction"
+                android:layout_weight="1"
+                android:layout_marginTop="10dp"
+                android:layout_gravity="center_horizontal" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="25dp"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:id="@+id/distance"
+                android:gravity="center_vertical|center_horizontal"
+                android:textColor="@color/colorAccent"
+                android:layout_gravity="center_horizontal"
+                android:text="0 m"
+                android:layout_marginBottom="5dp" />
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:id="@+id/narrative"
+            android:textColor="#FFFFFF"
+            android:layout_gravity="center_vertical"
+            android:gravity="center_vertical|center_horizontal" />
+    </LinearLayout>
+
+    <fragment
+        android:id="@+id/map"
+        android:name="com.google.android.gms.maps.SupportMapFragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/direction_layout"
+        android:layout_weight="1"
+
+        tools:layout="@layout/webview" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/boussole"
+        android:id="@+id/big_boussole"
+        android:layout_below="@+id/direction_layout"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:background="#FFFFFF"
+        android:onClick="help"
+        android:clickable="true"
+        android:longClickable="true"
+        android:textColor="@color/colorAccent"
+        android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
+        android:layout_above="@+id/ma_position"
+        android:visibility="visible" />
+
+    <ImageButton
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:id="@+id/boussole"
+        android:longClickable="true"
+        android:clickable="true"
+        android:onClick="help"
+        android:scaleType="centerInside"
+        android:background="@drawable/rounded_button"
+        android:src="@drawable/boussole"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_margin="20dp" />
+
+    <ImageButton
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:id="@+id/myLocation"
+        android:src="@drawable/ic_my_location_white_24dp"
+        android:longClickable="true"
+        android:clickable="true"
+        android:onClick="help"
+        android:layout_below="@+id/direction_layout"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_margin="5dp"
+        android:background="@drawable/rounded_button" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="80dp"
+        android:text="@string/ou_je_suis"
+        android:id="@+id/ma_position"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:clickable="true"
+        android:onClick="monAdresse"
+        android:visibility="visible" />
+
+</RelativeLayout>

@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:touchscreenBlocksFocus="false"
+    tools:context="eu.snigle.corsaire.MainActivity"
+    android:background="@color/white">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/my_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="?attr/colorPrimaryDark"
+        android:elevation="4dp"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+        android:focusableInTouchMode="true"
+        >
+        </android.support.v7.widget.Toolbar>
+
+    <EditText
+        android:id="@+id/visual_search"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/my_toolbar"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="10dp"
+        android:gravity="center"
+        android:hint="@string/destination_hint"
+        android:maxLines="1"
+        android:selectAllOnFocus="true"
+        android:singleLine="true"
+        android:textColor="@color/colorPrimary"
+
+        android:layout_marginLeft="2dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
+        android:layout_toLeftOf="@+id/imageButton2"
+        android:layout_toStartOf="@+id/imageButton2" />
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_below="@+id/visual_search"
+        android:id="@+id/linearLayout"
+        android:layout_marginBottom="2dp"
+        android:layout_alignLeft="@+id/visual_search"
+        android:layout_alignStart="@+id/visual_search"
+        android:layout_alignRight="@+id/imageButton2"
+        android:layout_alignEnd="@+id/imageButton2">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:background="@drawable/button"
+            android:layout_weight="1"
+            android:clickable="true"
+            android:onClick="rechercheProximite"
+            android:contentDescription="@string/recherche_proximite"
+            >
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="183dp"
+                android:layout_height="match_parent"
+                android:gravity="center|center_horizontal"
+                android:clickable="false">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="15dp"
+                    android:src="@drawable/ic_my_location_white_24dp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginRight="5dp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:textColor="#FFFFFF"
+                    android:text="@string/recherche_proximite" />
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:background="@drawable/button"
+            android:layout_alignTop="@+id/button"
+            android:layout_weight="1"
+            android:clickable="true"
+            android:onClick="rechercheVocale"
+            android:contentDescription="@string/recherche_vocale"
+            android:layout_marginLeft="5dp">
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center|center_horizontal"
+                android:clickable="false">
+
+                <ImageView
+                    android:id="@+id/imageButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="15dp"
+                    android:src="@drawable/ic_mic_white_24dp"
+
+                    android:layout_centerVertical="true"
+                    android:layout_toLeftOf="@+id/textView"
+                    android:layout_toStartOf="@+id/textView"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginRight="5dp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/textView"
+                    android:layout_alignBottom="@+id/imageButton"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignParentEnd="true"
+                    android:layout_gravity="center_vertical"
+                    android:textColor="#FFFFFF"
+                    android:text="@string/recherche_vocale" />
+            </LinearLayout>
+
+        </LinearLayout>
+    </LinearLayout>
+
+
+    <fragment
+        android:id="@+id/map"
+        android:name="com.google.android.gms.maps.SupportMapFragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        tools:layout="@layout/list_view_detail"
+        android:layout_below="@+id/linearLayout" />
+
+
+    <ImageButton
+        android:layout_width="35dp"
+        android:layout_height="35dp"
+        android:id="@+id/imageButton2"
+        android:src="@drawable/ic_search_white_24dp"
+        android:layout_alignTop="@+id/visual_search"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginRight="2dp"
+        android:layout_marginLeft="10dp"
+        android:background="@drawable/button"
+        android:clickable="true"
+        android:contentDescription="@string/search"
+        android:onClick="search" />
+
+    <RelativeLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentLeft="true"
+        android:id="@+id/layout_info"
+        android:visibility="invisible"
+        android:background="@color/white">
+
+        <TextView
+            android:id="@+id/info_distance"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:clickable="true"
+            android:gravity="center"
+            android:importantForAccessibility="yes"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
+            android:textColor="@color/colorAccent"
+            android:text="@string/choisir_destination"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_toLeftOf="@+id/button2"
+            android:layout_toStartOf="@+id/button2"
+            android:layout_weight="1" />
+
+        <ImageButton
+            android:id="@+id/button2"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:text="Commencer la navigation"
+            android:clickable="true"
+            android:onClick="naviguer"
+            android:contentDescription="@string/commencer_la_navigation"
+            android:src="@drawable/ic_media_play"
+            android:layout_weight="1"
+            android:layout_margin="5dp"
+            android:background="@drawable/button" />
+    </RelativeLayout>
+
+</RelativeLayout>

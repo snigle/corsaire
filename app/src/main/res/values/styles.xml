@@ -1,0 +1,35 @@
+<resources>
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">#000000</item>
+        <!--<item name="android:textColorPrimary">#FFFFFF</item>-->
+        <item name="android:buttonStyle">@style/Button</item>
+        <item name="android:imageButtonStyle">@style/ImageButton</item>
+    </style>
+
+    <style name="Button" parent="@android:style/Widget.Button">
+        <item name="android:gravity">center_vertical|center_horizontal</item>
+        <item name="android:height">40dp</item>
+        <item name="android:textColor">#FFFFFFFF</item>
+        <item name="android:shadowColor">#A8A8A8</item>
+        <item name="android:shadowRadius">5</item>
+        <item name="android:background">@drawable/button</item>
+        <item name="android:focusable">true</item>
+        <item name="android:clickable">true</item>
+    </style>
+
+    <style name="ImageButton" parent="@android:style/Widget.ImageButton">
+        <item name="android:gravity">center_vertical|center_horizontal</item>
+        <item name="android:height">40dp</item>
+        <item name="android:shadowColor">#A8A8A8</item>
+        <item name="android:shadowRadius">5</item>
+        <item name="android:background">@drawable/button</item>
+        <item name="android:focusable">true</item>
+        <item name="android:clickable">true</item>
+    </style>
+
+</resources>

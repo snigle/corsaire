@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:touchscreenBlocksFocus="false"
+    android:orientation="vertical"
+    tools:context="eu.snigle.corsaire.MainActivity">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/my_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="?attr/colorPrimaryDark"
+        android:elevation="4dp"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+        android:focusableInTouchMode="true"
+
+        />
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <EditText
+            android:id="@+id/visual_search"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="10dp"
+            android:gravity="center"
+            android:hint="@string/destination_hint"
+            android:maxLines="1"
+            android:selectAllOnFocus="true"
+            android:singleLine="true"
+            android:textColor="@color/colorPrimaryDark"
+
+            android:layout_marginLeft="10dp"
+            android:layout_weight="1" />
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="@string/recherche_vocale"
+            android:clickable="true"
+            android:onClick="rechercheVocale"
+            android:layout_weight="1"
+            android:layout_margin="5dp" />
+
+        <Button
+            android:id="@+id/button"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="@string/recherche_proximite"
+            android:clickable="true"
+            android:onClick="rechercheProximite"
+            android:layout_weight="1"
+            android:layout_margin="5dp" />
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="@string/ou_je_suis"
+            android:id="@+id/button3"
+            android:layout_gravity="center_horizontal"
+            android:layout_weight="1"
+            android:clickable="true"
+            android:onClick="monAdresse"
+            android:layout_margin="5dp" />
+
+        <TextView
+            android:id="@+id/info_distance"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
+            android:textColor="@color/colorAccent"
+            android:text="@string/choisir_destination"
+            android:layout_weight="1"
+            android:layout_margin="5dp"
+            android:clickable="false" />
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="@string/details_itineraire"
+            android:layout_weight="1"
+            android:layout_margin="5dp"
+            android:clickable="true"
+            android:onClick="details" />
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:clickable="true"
+            android:onClick="naviguer"
+            android:layout_weight="1"
+            android:text="@string/commencer_la_navigation"
+            android:layout_margin="5dp" />
+    </LinearLayout>
+
+
+</LinearLayout>

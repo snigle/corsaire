@@ -1,0 +1,67 @@
+<resources>
+    <string name="app_name">Corsaire</string>
+    <string name="google_app_id" translatable="false">proxygps</string>
+    <string name="parametres">Paramètres</string>
+    <string name="pref_bus">Autoriser itinéraire en bus</string>
+    <string name="pref_bus_summ">Calcul l\'itinéraire en utilisant le réseau de transport public lorsque c\'est possible</string>
+    <string name="pref_navigation_title">Navigation</string>
+    <string name="destination_hint">Destination</string>
+    <string name="recherche_vocale">Recherche Vocale</string>
+    <string name="recherche_proximite">Autour de moi</string>
+    <string name="commencer_la_navigation">Commencer la navigation</string>
+    <string name="choisir_destination">Choisissez une destination pour calculer un itinéraire</string>
+    <string name="clique_pour_detail">Cliquez ici pour avoir le détail de l\'itinéraire</string>
+    <string name="itineraire">%1$s se situe à %2$s et à %3$s.</string>
+    <string name="erreur_autorisation">Vous devez autoriser la localisation GPS  pour utiliser l\'application</string>
+    <string name="adresse_introuvable">Adresse non trouvée. Merci de redéfinir l\'adresse de destination.</string>
+    <string name="erreur_localisation">Impossible de vous géolocaliser, veuillez réessayer.</string>
+    <string name="erreur_connexion">Vérifiez votre connexion internet</string>
+    <string name="calcul_itineraire">Calcul de l\'itinéraire</string>
+    <string name="pref_bus_key" translatable="false">pref_bus</string>
+    <string name="erreur_505">Une erreur est survenue, veuillez réessayer.</string>
+    <string name="speech_prompt">Énoncez l\'adresse ou le lieu de destination.</string>
+    <string name="speech_not_supported">Désolé, votre appareil ne supporte pas la reconnaissance vocale!</string>
+    <string name="erreur_vocale">Je n\'ai pas compris votre demande. Veuillez réessayer.</string>
+    <string name="bar">Bars Café</string>
+    <string name="restaurant">Restaurants</string>
+    <string name="supermarche">Supermarchés</string>
+    <string name="atm">Distributeurs de billets</string>
+    <string name="autre">Autres</string>
+    <string name="coiffeur">Coiffeurs</string>
+    <string name="bijouterie">Bijouterie</string>
+    <string name="bibliotheque">Bibliothèques</string>
+    <string name="culture">Culture</string>
+    <string name="pharmacie">Pharmacies</string>
+    <string name="shopping">Shopping</string>
+    <string name="transport">Transports en commun</string>
+    <!--<string name="pref_proximite_radius_key">pref_proximite_radius</string>-->
+    <string name="erreur_pas_de_place_proximite">Aucun lieu ne se trouve à proximité.</string>
+    <string name="boulangerie">Boulangeries</string>
+    <string name="liste_categories">Liste des Catégories</string>
+    <string name="etablissements">Liste des établissements</string>
+    <string name="recherche_en_cours">Recherche en cours</string>
+    <string name="navigation">Navigation</string>
+    <string name="error_lancement_navigation">Vous devez calculer un itinéraire avant de lancer la navigation</string>
+    <string name="erreur_itineraire">Aucun itinéraire disponible pour cette destination</string>
+    <string name="saved_itinerary_key" translatable="false">saved_itinerary</string>
+    <string name="saved_itinerary_name_key" translatable="false">saved_itinerary_name</string>
+    <string name="details_itineraire">Détails de l\'itinéraire</string>
+    <string name="dans">Dans</string>
+    <!--<string name="pendant">pendant</string>-->
+    <string name="message_aide_boussole">Restez appuyé sur la boussole et orientez votre téléphone autour de vous. Lorsque vous pointez dans la bonne direction, celui-ci se mettra à vibrer.</string>
+    <string name="pref_tts_key" translatable="false">pref_tts</string>
+    <string name="pref_tts_title">Audio</string>
+    <string name="pref_tts_summ">Activer le son</string>
+    <string name="pref_vibrate_key" translatable="false">pref_vibrate</string>
+    <string name="pref_vibrate_title">Vibreur</string>
+    <string name="pref_vibrate_summ">Vibre lors d\'une nouvelle étape de l\'itinéraire</string>
+    <string name="vous_arrivez_a_destination">Vous arrivez à destination</string>
+    <string name="search">Rechercher</string>
+    <string name="vous_vous_trouvez_ici">Vous êtes à</string>
+    <string name="ou_je_suis">Où suis-je?</string>
+    <string name="boussole">Boussole</string>
+    <string name="carte">Carte</string>
+    <!--<string name="liste">Liste</string>-->
+    <string name="ma_position">Ma position</string>
+
+</resources>

@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="eu.snigle.corsaire">
+
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme">
+        <activity
+            android:name="eu.snigle.corsaire.MainActivity"
+            android:launchMode="singleTask">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="eu.snigle.corsaire.settings.MainSettingsActivity"
+            android:label="@string/parametres"
+            android:launchMode="singleTask" />
+
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyB6Tnnp4ZOYZUPuQYZ2v2t4Jt4IQhxVBcc" />
+
+        <activity
+            android:name="eu.snigle.corsaire.proximite.CategoriesActivity"
+            android:label="@string/liste_categories"
+             />
+
+        <activity
+            android:name="eu.snigle.corsaire.proximite.SelectPlaceActivity"
+            android:label="@string/etablissements"
+             />
+
+        <service
+            android:name="eu.snigle.corsaire.navigation.NavigationService"
+            android:enabled="true"
+            android:exported="true" />
+
+        <activity android:name="eu.snigle.corsaire.navigation.NavigationActivity"
+            android:launchMode="singleTop"
+            android:label="@string/navigation"
+            android:parentActivityName="eu.snigle.corsaire.MainActivity"
+            >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="eu.snigle.corsaire.MainActivity" />
+
+        </activity>
+
+        <activity android:name="eu.snigle.corsaire.itinerary.details.DetailsActivity"
+            android:launchMode="singleTask"
+            android:label="@string/details_itineraire"
+            android:parentActivityName="eu.snigle.corsaire.navigation.NavigationActivity"
+            >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="eu.snigle.corsaire.navigation.NavigationActivity" />
+
+        </activity>
+    </application>
+
+</manifest>
