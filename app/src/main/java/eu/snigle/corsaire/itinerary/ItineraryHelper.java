@@ -32,6 +32,7 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
+import java.util.regex.Pattern;
 
 import eu.snigle.corsaire.R;
 import eu.snigle.corsaire.proximite.CategoriesActivity;
@@ -131,7 +132,11 @@ public class ItineraryHelper {
                         protected Address doInBackground(Void... params) {
                             geocoding = true;
                             try {
-                                List<Address> geocode = geocoder.getFromLocationName(s, 7, mLastLocation.getLatitude() - 0.03, mLastLocation.getLongitude() - 0.03, mLastLocation.getLatitude() + 0.03, mLastLocation.getLongitude() + 0.03);
+                                Pattern regex = Pattern.compile("^-?[0-9]+\\.[0-9]+,-?[0-9]+\\.[0-9]+$");
+                                Log.i(TAG,"lat lng ? : "+s+" - "+ regex.matcher(s).find());
+                                List<Address> geocode = !regex.matcher(s).find() ?
+                                        geocoder.getFromLocationName(s, 15, mLastLocation.getLatitude() - 0.05, mLastLocation.getLongitude() - 0.05, mLastLocation.getLatitude() + 0.05, mLastLocation.getLongitude() + 0.05)
+                                        : geocoder.getFromLocationName(s, 1);
                                 if (geocode != null && geocode.size() > 0) {
                                     //Take nearest geocode result
                                     Address returnedArrivalAddress = geocode.get(0);
@@ -194,7 +199,7 @@ public class ItineraryHelper {
         } catch (PackageManager.NameNotFoundException e) {
             Toast.makeText(context,context.getString(R.string.erreur_505),Toast.LENGTH_SHORT).show();
         }
-        url += "&name="+s;
+        url += "&name="+s.replace(" ","+");
         Log.i(TAG, url);
         JsonObjectRequest req = new JsonObjectRequest(Request.Method.GET, url, null,
                 new Response.Listener<JSONObject>() {
@@ -233,7 +238,10 @@ public class ItineraryHelper {
         queue.add(req);
     }
 
-    public void getItinerary(final String name, LatLng depart, LatLng destination) {
+    public void getItinerary(final String name, LatLng depart, LatLng destination){
+        getItinerary(name,depart,destination,false);
+    }
+    public void getItinerary(final String name, final LatLng depart, final LatLng destination, final boolean walking) {
         Log.i(TAG, "Adresse trouvée, calcul de l'itinéraire");
         if(calculatingItinerary)
             return;
@@ -244,7 +252,7 @@ public class ItineraryHelper {
         url += "&destination=" + destination.latitude + "," + destination.longitude;
 
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(context);
-        boolean bus = sharedPref.getBoolean(context.getString(R.string.pref_bus_key), false);
+        boolean bus = !walking && sharedPref.getBoolean(context.getString(R.string.pref_bus_key), false);
         Log.i(TAG, "preference bus : " + bus);
         if (!bus) {
             url += "&mode=walking";
@@ -253,7 +261,7 @@ public class ItineraryHelper {
         }
         url += "&language=" + Locale.getDefault().getLanguage();
         Log.d(TAG, url);
-        Toast.makeText(context, context.getString(eu.snigle.corsaire.R.string.calcul_itineraire), Toast.LENGTH_SHORT).show();
+        if(!walking) Toast.makeText(context, context.getString(eu.snigle.corsaire.R.string.calcul_itineraire), Toast.LENGTH_SHORT).show();
         JsonObjectRequest req = new JsonObjectRequest(Request.Method.GET, url, null,
                 new Response.Listener<JSONObject>() {
                     @Override
@@ -262,6 +270,8 @@ public class ItineraryHelper {
                         try {
                             if(response.getJSONArray("routes").length()>0)
                                 callback.callbackItinerary(new Itinerary(name, response));
+                            else if(!walking)
+                                getItinerary(name,depart,destination,true);
                             else
                                 Toast.makeText(context, context.getString(R.string.erreur_itineraire), Toast.LENGTH_SHORT).show();
                         } catch (JSONException e) {

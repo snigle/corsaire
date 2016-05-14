@@ -200,9 +200,6 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                 builder.build());
 
 
-
-
-
         if (isExploreByTouchEnabled) {
             checkSavedItinerary(); //Because for other, the check is done onMapReady
         } else {
