@@ -63,5 +63,9 @@
     <string name="carte">Carte</string>
     <!--<string name="liste">Liste</string>-->
     <string name="ma_position">Ma position</string>
+    <string name="prendre_le">Prendre le</string>
+    <string name="de_larret">de l\'arrêt</string>
+    <string name="jusqua_larret">jusqu\'à l\'arrêt</string>
+    <string name="et">et</string>
 
 </resources>

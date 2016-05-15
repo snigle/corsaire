@@ -5,8 +5,11 @@ import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
+import android.content.BroadcastReceiver;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.BitmapFactory;
@@ -14,6 +17,7 @@ import android.hardware.GeomagneticField;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.media.AudioManager;
 import android.os.Binder;
 import android.os.Bundle;
 import android.os.IBinder;
@@ -83,6 +87,9 @@ public class NavigationService extends Service implements LocationListener, Goog
     private int current_id;
     private ItineraryHelper itineraryHelper;
     private Calendar lastCalcul = null;
+    private AudioManager am = null;
+    private RemoteControlReceiver remoteControlReceiver = null;
+    private BroadcastReceiver receiver;
 
     public NavigationService() {
     }
@@ -94,7 +101,7 @@ public class NavigationService extends Service implements LocationListener, Goog
         String json = sharedPref.getString(getString(R.string.saved_itinerary_key), "");
         if (json != "") {
             try {
-                itinerary = new Itinerary(sharedPref.getString(getString(R.string.saved_itinerary_name_key), ""), new JSONObject(json));
+                itinerary = new Itinerary(this,sharedPref.getString(getString(R.string.saved_itinerary_name_key), ""), new JSONObject(json));
                 current = itinerary.steps.get(0);
                 location = current.start;
                 distance = Math.round(current.start.distanceTo(current.end));
@@ -109,6 +116,9 @@ public class NavigationService extends Service implements LocationListener, Goog
             return;
         }
         vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+        am = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
+        Log.i(TAG,RemoteControlReceiver.class.getPackage().getName()+" "+RemoteControlReceiver.class.getSimpleName());
+        am.registerMediaButtonEventReceiver(new ComponentName(this,RemoteControlReceiver.class));
         //Premier lancement
         mGoogleApiClient = new GoogleApiClient.Builder(this)
                 .addConnectionCallbacks(this)
@@ -192,7 +202,7 @@ public class NavigationService extends Service implements LocationListener, Goog
             if(!firstime && sharedPref.getBoolean(getString(R.string.pref_vibrate_key),false) && vibrator != null){
                 vibrator.vibrate(500);
             }
-        } else if (lastShowDirection.distanceTo(location)>50) {
+        } else if (lastShowDirection.distanceTo(location)>50 && (!(current instanceof TransitStep) || current.end.distanceTo(location)<100)) {
             showDirection();
             lastShowDirection = location;
         }
@@ -237,10 +247,13 @@ public class NavigationService extends Service implements LocationListener, Goog
 //        Log.i(TAG, current.narrative);
         if(sharedPref.getBoolean(getString(R.string.pref_tts_key),false) && mTts != null) {
             mTts.stop();
-            if(old == null)
-                mTts.speak(getString(R.string.dans)+" "+getDistance()+" mètres, "+Html.fromHtml(getNarrative()).toString(), TextToSpeech.QUEUE_ADD, null);
+            if((current instanceof TransitStep)){
+                mTts.speak(Html.fromHtml(getNarrative()).toString(), TextToSpeech.QUEUE_ADD, null);
+            }
+            else if(old == null)
+                mTts.speak(getString(R.string.dans)+" "+getDistance()+"m, "+Html.fromHtml(getNarrative()).toString(), TextToSpeech.QUEUE_ADD, null);
             else
-                mTts.speak(Html.fromHtml(current.narrative+" et dans "+getDistance()+" mètres "+getNarrative()).toString(), TextToSpeech.QUEUE_ADD, null);
+                mTts.speak(Html.fromHtml(current.narrative+" "+getString(R.string.et)+" "+getString(R.string.dans)+" "+getDistance()+"m "+getNarrative()).toString(), TextToSpeech.QUEUE_ADD, null);
         }
         setNotification();
     }
@@ -342,6 +355,10 @@ public class NavigationService extends Service implements LocationListener, Goog
                 quit();
                 return 0;
             }
+            else if(intent.getExtras() != null && intent.getExtras().getBoolean("speak", false)) {
+                Log.i(TAG, "speak ! ");
+                showDirection();
+            }
         }
         return super.onStartCommand(intent, START_FLAG_REDELIVERY, startId);
     }
@@ -440,6 +457,9 @@ public class NavigationService extends Service implements LocationListener, Goog
         if(mTts != null){
             mTts.stop();
             mTts.shutdown();
+        }
+        if(am != null){
+            am.unregisterMediaButtonEventReceiver(new ComponentName(this,"RemoteControlReceiver"));
         }
         super.onDestroy();
     }

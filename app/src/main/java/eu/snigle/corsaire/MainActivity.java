@@ -217,7 +217,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         String json = sharedPref.getString(getString(R.string.saved_itinerary_key),"");
         if(json != "") {
             try {
-                callbackItinerary(new Itinerary(sharedPref.getString(getString(R.string.saved_itinerary_name_key),""), new JSONObject(json)));
+                callbackItinerary(new Itinerary(this,sharedPref.getString(getString(R.string.saved_itinerary_name_key),""), new JSONObject(json)));
             } catch (JSONException e) {
                 e.printStackTrace();
             }

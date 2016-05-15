@@ -55,4 +55,8 @@
     <string name="ou_je_suis">Where am I ?</string>
     <string name="search">Search</string>
     <string name="vous_vous_trouvez_ici">You are at </string>
+    <string name="de_larret">from the stop</string>
+    <string name="jusqua_larret">to the stop</string>
+    <string name="prendre_le">take the</string>
+    <string name="et">and</string>
 </resources>

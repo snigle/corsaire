@@ -33,7 +33,7 @@ public class DetailsActivity extends AppCompatActivity {
         Itinerary itinerary;
         if (json != "") {
             try {
-                itinerary = new Itinerary(sharedPref.getString(getString(R.string.saved_itinerary_name_key), ""), new JSONObject(json));
+                itinerary = new Itinerary(this,sharedPref.getString(getString(R.string.saved_itinerary_name_key), ""), new JSONObject(json));
             } catch (JSONException e) {
                 e.printStackTrace();
                 Toast.makeText(DetailsActivity.this, getString(R.string.error_lancement_navigation), Toast.LENGTH_SHORT).show();

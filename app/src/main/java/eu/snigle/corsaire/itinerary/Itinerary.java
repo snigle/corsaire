@@ -1,5 +1,6 @@
 package eu.snigle.corsaire.itinerary;
 
+import android.content.Context;
 import android.location.Location;
 
 import com.google.android.gms.maps.model.LatLng;
@@ -29,7 +30,7 @@ public class Itinerary {
     public final String name;
     public final String json;
 
-    public Itinerary(String name, JSONObject json) throws JSONException {
+    public Itinerary(Context context, String name, JSONObject json) throws JSONException {
         JSONObject leg = json.getJSONArray("routes").getJSONObject(0).getJSONArray("legs").getJSONObject(0);
         this.destination = leg.getString("end_address");
         this.startAddress = leg.getString("start_address");
@@ -69,7 +70,7 @@ public class Itinerary {
                 }
             }
             else if(step.getString("travel_mode").equals("TRANSIT")){
-                steps.add(new TransitStep(step));
+                steps.add(new TransitStep(context,step));
             }
         }
 //        JSONObject lastStep = json_steps.getJSONObject(json_steps.length() - 1);

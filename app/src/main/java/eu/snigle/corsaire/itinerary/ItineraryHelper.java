@@ -269,7 +269,7 @@ public class ItineraryHelper {
                         calculatingItinerary = false;
                         try {
                             if(response.getJSONArray("routes").length()>0)
-                                callback.callbackItinerary(new Itinerary(name, response));
+                                callback.callbackItinerary(new Itinerary(context,name, response));
                             else if(!walking)
                                 getItinerary(name,depart,destination,true);
                             else
