@@ -24,6 +24,7 @@ import android.view.View;
 import android.view.accessibility.AccessibilityManager;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -180,7 +181,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                 } else {
                     Toast.makeText(getApplicationContext(), getString(R.string.erreur_autorisation), Toast.LENGTH_LONG).show();
                     ActivityCompat.requestPermissions(this,
-                            new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                            new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION},
                             MainActivity.REQUEST_ACCESS_FINE_LOCATION);
                 }
                 return;
@@ -201,6 +202,8 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
 
         if (isExploreByTouchEnabled) {
+            SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+            ((CheckBox) findViewById(R.id.bus_checkbox)).setChecked(sharedPref.getBoolean(getString(R.string.pref_bus_key), false));
             checkSavedItinerary(); //Because for other, the check is done onMapReady
         } else {
             SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
@@ -246,9 +249,25 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         super.onResume();
         if (mGoogleApiClient != null)
             mGoogleApiClient.connect();
-        if(itinerary != null){
-            saveItinerary();
+        if (mMap != null){
+            SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+            String json = sharedPref.getString(getString(R.string.saved_itinerary_key),"");
+            try {
+                itinerary = new Itinerary(this,sharedPref.getString(getString(R.string.saved_itinerary_name_key),""), new JSONObject(json));
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
         }
+    }
+
+    public void toggleBus(View view){
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        boolean bus = !sharedPref.getBoolean(getString(R.string.pref_bus_key), false);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.putBoolean(getString(R.string.pref_bus_key), bus);
+        editor.commit();
+        ((CheckBox)view).setChecked(bus);
+
     }
 
     @Override
@@ -279,17 +298,9 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         searchText.clearFocus();
         this.itinerary = itinerary;
 
-        saveItinerary();
         //Log.i(TAG,itinerary.getGPX());
     }
 
-    private void saveItinerary() {
-        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-        SharedPreferences.Editor editor = sharedPref.edit();
-        editor.putString(getString(R.string.saved_itinerary_key), itinerary.json);
-        editor.putString(getString(R.string.saved_itinerary_name_key), itinerary.name);
-        editor.commit();
-    }
 
     @Override
     public void onMapReady(GoogleMap googleMap) {

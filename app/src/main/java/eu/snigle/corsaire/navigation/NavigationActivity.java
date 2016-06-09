@@ -293,7 +293,7 @@ public class NavigationActivity extends AppCompatActivity implements SensorEvent
                 long diff = Math.abs(Math.round(bearing) - Math.round(mService.getAngle()));
                 if (vibrate && diff < 30 && diff != 0) {
                     vibrator.cancel();
-                    vibrator.vibrate((1 / diff) * 2000 + 100);
+                    vibrator.vibrate(300);
                     //Log.i(TAG, "Mon angle : " + Math.round(bearing) + "  --- lieux : " + Math.round(angle));
                 }
 

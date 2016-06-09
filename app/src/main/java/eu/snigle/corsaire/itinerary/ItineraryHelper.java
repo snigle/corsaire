@@ -268,8 +268,11 @@ public class ItineraryHelper {
                     public void onResponse(JSONObject response) {
                         calculatingItinerary = false;
                         try {
-                            if(response.getJSONArray("routes").length()>0)
-                                callback.callbackItinerary(new Itinerary(context,name, response));
+                            if(response.getJSONArray("routes").length()>0){
+                                Itinerary itinerary = new Itinerary(context, name, response);
+                                saveItinerary(itinerary);
+                                callback.callbackItinerary(itinerary);
+                            }
                             else if(!walking)
                                 getItinerary(name,depart,destination,true);
                             else
@@ -298,5 +301,13 @@ public class ItineraryHelper {
         });
         //        // Add the request to the RequestQueue.
         queue.add(req);
+    }
+
+    private void saveItinerary(Itinerary itinerary) {
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(context);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.putString(context.getString(R.string.saved_itinerary_key), itinerary.json);
+        editor.putString(context.getString(R.string.saved_itinerary_name_key), itinerary.name);
+        editor.commit();
     }
 }

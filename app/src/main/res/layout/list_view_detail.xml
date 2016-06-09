@@ -5,11 +5,11 @@
     >
     <TextView android:id="@+id/titre"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:textColor="@color/colorAccent"
+        android:layout_height="60dp"
+        android:textColor="@color/colorPrimary"
         android:text="example"
         android:gravity="center"
-        />
+        android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium" />
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"

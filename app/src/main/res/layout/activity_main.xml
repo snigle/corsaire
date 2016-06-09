@@ -19,7 +19,6 @@
         android:focusableInTouchMode="true"
         >
         </android.support.v7.widget.Toolbar>
-
     <EditText
         android:id="@+id/visual_search"
         android:layout_width="match_parent"

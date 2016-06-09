@@ -465,9 +465,9 @@ public class NavigationService extends Service implements LocationListener, Goog
     }
 
     public void quit() {
-        SharedPreferences.Editor editor = sharedPref.edit();
-        editor.remove(getString(R.string.saved_itinerary_key));
-        editor.commit();
+//        SharedPreferences.Editor editor = sharedPref.edit();
+//        editor.remove(getString(R.string.saved_itinerary_key));
+//        editor.commit();
         stopSelf();
     }
 
@@ -479,5 +479,13 @@ public class NavigationService extends Service implements LocationListener, Goog
         return current;
     }
 
+    public void onTaskRemoved(Intent rootIntent) {
+
+        //unregister listeners
+        //do any other cleanup if required
+
+        //stop service
+        stopSelf();
+    }
 
 }
