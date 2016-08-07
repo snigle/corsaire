@@ -31,8 +31,9 @@ public class DetailsFragment extends ListFragment {
         for (Step step: itinerary.steps ) {
             Map<String, Object> el = new HashMap<String, Object>();
             el.put("narrative", Html.fromHtml(step.narrative));
+            el.put("distance", step.distance+"m");
             data.add(el);
         }
-        setListAdapter(new SimpleAdapter(context,data,R.layout.list_view_detail, new String[]{"narrative"}, new int[]{R.id.titre}));
+        setListAdapter(new SimpleAdapter(context,data,R.layout.list_view_detail, new String[]{"narrative", "distance"}, new int[]{R.id.titre, R.id.distance}));
     }
 }

@@ -2,11 +2,14 @@ package eu.snigle.corsaire;
 
 import android.Manifest;
 import android.content.ActivityNotFoundException;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.Location;
+import android.os.IBinder;
 import android.preference.PreferenceManager;
 import android.speech.RecognizerIntent;
 import android.support.annotation.NonNull;
@@ -31,6 +34,7 @@ import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.LocationSettingsRequest;
@@ -192,25 +196,25 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     @Override
     public void onConnected(@Nullable Bundle bundle) {
         LocationRequest mLocationRequest = new LocationRequest();
-        mLocationRequest.setInterval(5000);
+        mLocationRequest.setInterval(2000);
         mLocationRequest.setFastestInterval(1000);
-        mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+        mLocationRequest.setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY);
         LocationSettingsRequest.Builder builder = new LocationSettingsRequest.Builder()
                 .addLocationRequest(mLocationRequest);
         LocationServices.SettingsApi.checkLocationSettings(mGoogleApiClient,
                 builder.build());
 
-
         if (isExploreByTouchEnabled) {
             SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
             ((CheckBox) findViewById(R.id.bus_checkbox)).setChecked(sharedPref.getBoolean(getString(R.string.pref_bus_key), false));
             checkSavedItinerary(); //Because for other, the check is done onMapReady
+            Intent intent = new Intent(this, MyAddressService.class);
+            startService(intent);
         } else {
             SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                     .findFragmentById(R.id.map);
             mapFragment.getMapAsync(this);
         }
-
 
 
     }
@@ -257,6 +261,11 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             } catch (JSONException e) {
                 e.printStackTrace();
             }
+        }
+        Log.i(TAG,"resume mainActivity");
+        if(isExploreByTouchEnabled) {
+            Intent intent = new Intent(this, MyAddressService.class);
+            startService(intent);
         }
     }
 
@@ -377,7 +386,11 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             return;
         }
 
-        Intent intentService = new Intent(this,NavigationService.class);
+        Intent intentService = new Intent(this,MyAddressService.class);
+        intentService.putExtra("close", true);
+        startService(intentService);
+
+        intentService = new Intent(this,NavigationService.class);
         startService(intentService);
 
         Intent intent = new Intent(this, NavigationActivity.class);
@@ -422,7 +435,11 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     }
 
     public void monAdresse(View v){
-        itineraryHelper.getMyAddress();
+//        itineraryHelper.getMyAddress();
+        Log.i(TAG,"play myaddress pressed !");
+        Intent myIntent = new Intent(this, MyAddressService.class);
+        myIntent.putExtra("myAddress", true);
+        startService(myIntent);
     }
 
     @Override
@@ -438,4 +455,5 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         Intent intent = new Intent(this, DetailsActivity.class);
         startActivity(intent);
     }
+
 }

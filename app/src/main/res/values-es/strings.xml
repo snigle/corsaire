@@ -59,4 +59,9 @@
     <string name="jusqua_larret">hasta la parada</string>
     <string name="prendre_le">toma el</string>
     <string name="et">y</string>
+    <string name="croissant">ascending order</string>
+    <string name="decroissant">descending order</string>
+    <string name="precision">precisión</string>
+    <string name="gps_lost">Señal GPS perdió</string>
+    <string name="gps_found">Señal GPS encontró</string>
 </resources>

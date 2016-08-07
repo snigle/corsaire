@@ -85,6 +85,7 @@ public class NavigationActivity extends AppCompatActivity implements SensorEvent
     private Polyline polyline;
     private View.OnTouchListener boussoleListener;
     private ImageButton myLocationButton;
+    private Double bearing;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -224,7 +225,10 @@ public class NavigationActivity extends AppCompatActivity implements SensorEvent
         Log.i(TAG, "resume " + getIntent().getExtras());
         Intent intent = new Intent(this, NavigationService.class);
         bindService(intent, mConnection, Context.BIND_AUTO_CREATE);
-        mSensorManager.registerListener(this, mSensorManager.getDefaultSensor(Sensor.TYPE_ROTATION_VECTOR), SensorManager.SENSOR_DELAY_UI);
+        if(!isExploreByTouchEnabled)
+            mSensorManager.registerListener(this, mSensorManager.getDefaultSensor(Sensor.TYPE_ROTATION_VECTOR), SensorManager.SENSOR_DELAY_UI);
+        else
+            mSensorManager.registerListener(this, mSensorManager.getDefaultSensor(Sensor.TYPE_ROTATION_VECTOR), SensorManager.SENSOR_DELAY_NORMAL);
     }
 
     @Override
@@ -288,8 +292,8 @@ public class NavigationActivity extends AppCompatActivity implements SensorEvent
             float[] orientation = new float[3];
             SensorManager.getOrientation(mRotationMatrix, orientation);
             if (orientation != null) {
-                double bearing = Math.toDegrees(orientation[0]) + mService.getDeclination();
-                orienteCamera((float) bearing);
+                bearing = Math.toDegrees(orientation[0]) + mService.getDeclination();
+                orienteCamera(bearing.floatValue());
                 long diff = Math.abs(Math.round(bearing) - Math.round(mService.getAngle()));
                 if (vibrate && diff < 30 && diff != 0) {
                     vibrator.cancel();
@@ -366,7 +370,7 @@ public class NavigationActivity extends AppCompatActivity implements SensorEvent
 
     public void monAdresse(View v){
         if(mBound)
-            mService.getMyAddress();
+            mService.getMyAddress(bearing);
     }
 }
 

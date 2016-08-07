@@ -3,13 +3,31 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="wrap_content"
     >
-    <TextView android:id="@+id/titre"
+
+    <LinearLayout
+        android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:textColor="@color/colorPrimary"
-        android:text="example"
-        android:gravity="center"
-        android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium" />
+        android:layout_height="match_parent">
+
+        <TextView android:id="@+id/titre"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:textColor="@color/colorPrimary"
+            android:text="example"
+            android:gravity="center"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
+            android:layout_weight=".3" />
+
+        <TextView android:id="@+id/distance"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:textColor="@color/colorPrimary"
+            android:text="500m"
+            android:gravity="center"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
+            android:layout_weight="1" />
+    </LinearLayout>
+
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"

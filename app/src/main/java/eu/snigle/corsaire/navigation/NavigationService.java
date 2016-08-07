@@ -9,10 +9,8 @@ import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.graphics.BitmapFactory;
 import android.hardware.GeomagneticField;
 import android.location.Location;
 import android.location.LocationListener;
@@ -47,7 +45,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.Calendar;
-import java.util.GregorianCalendar;
 
 import eu.snigle.corsaire.R;
 import eu.snigle.corsaire.itinerary.Itinerary;
@@ -90,6 +87,8 @@ public class NavigationService extends Service implements LocationListener, Goog
     private AudioManager am = null;
     private RemoteControlReceiver remoteControlReceiver = null;
     private BroadcastReceiver receiver;
+    private ComponentName componentName;
+    private boolean arrived = false;
 
     public NavigationService() {
     }
@@ -97,6 +96,8 @@ public class NavigationService extends Service implements LocationListener, Goog
     @Override
     public void onCreate() {
         super.onCreate();
+        am = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
+        componentName = new ComponentName(this,RemoteControlReceiver.class);
         sharedPref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         String json = sharedPref.getString(getString(R.string.saved_itinerary_key), "");
         if (json != "") {
@@ -116,9 +117,6 @@ public class NavigationService extends Service implements LocationListener, Goog
             return;
         }
         vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
-        am = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
-        Log.i(TAG,RemoteControlReceiver.class.getPackage().getName()+" "+RemoteControlReceiver.class.getSimpleName());
-        am.registerMediaButtonEventReceiver(new ComponentName(this,RemoteControlReceiver.class));
         //Premier lancement
         mGoogleApiClient = new GoogleApiClient.Builder(this)
                 .addConnectionCallbacks(this)
@@ -205,6 +203,10 @@ public class NavigationService extends Service implements LocationListener, Goog
         } else if (lastShowDirection.distanceTo(location)>50 && (!(current instanceof TransitStep) || current.end.distanceTo(location)<100)) {
             showDirection();
             lastShowDirection = location;
+        } else if (!this.arrived && current.equals(itinerary.steps.getLast()) && current.end.distanceTo(location) < 10){
+            //Arrivée à destination
+            this.arrived = true;
+            showDirection(old);
         }
         send(UPDATE_CODE, new Bundle());
 
@@ -217,7 +219,7 @@ public class NavigationService extends Service implements LocationListener, Goog
     }
 
     public String getNarrative(){
-        if(current instanceof TransitStep){
+        if(current instanceof TransitStep) {
             return current.narrative;
         }
         else if(current == itinerary.steps.getLast()){
@@ -291,12 +293,16 @@ public class NavigationService extends Service implements LocationListener, Goog
 
     @Override
     public void onProviderEnabled(String provider) {
-
+        if (!this.firstime && provider.equals(LocationManager.GPS_PROVIDER)){
+            Toast.makeText(NavigationService.this, getString(R.string.gps_found), Toast.LENGTH_SHORT).show();
+        }
     }
 
     @Override
     public void onProviderDisabled(String provider) {
-
+        if (provider.equals(LocationManager.GPS_PROVIDER)){
+            Toast.makeText(NavigationService.this, getString(R.string.gps_lost), Toast.LENGTH_SHORT).show();
+        }
     }
 
     public Double getAngle() {
@@ -328,8 +334,8 @@ public class NavigationService extends Service implements LocationListener, Goog
         send(UPDATE_CODE,new Bundle());
     }
 
-    public void getMyAddress() {
-        itineraryHelper.getMyAddress();
+    public void getMyAddress(Double bearing) {
+        itineraryHelper.getMyAddress(mTts, bearing);
     }
 
     public LatLng getLatLng() {
@@ -348,6 +354,7 @@ public class NavigationService extends Service implements LocationListener, Goog
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         Log.i(TAG,"start command");
+        am.registerMediaButtonEventReceiver(componentName);
         if (intent != null) {
             if (intent.getExtras() != null && intent.getExtras().getBoolean("close", false)) {
                 Log.i(TAG, "close " + startId);
@@ -459,7 +466,8 @@ public class NavigationService extends Service implements LocationListener, Goog
             mTts.shutdown();
         }
         if(am != null){
-            am.unregisterMediaButtonEventReceiver(new ComponentName(this,"RemoteControlReceiver"));
+            Log.i(TAG,"am ok");
+            am.unregisterMediaButtonEventReceiver(componentName);
         }
         super.onDestroy();
     }
@@ -487,5 +495,6 @@ public class NavigationService extends Service implements LocationListener, Goog
         //stop service
         stopSelf();
     }
+
 
 }

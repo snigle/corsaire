@@ -14,12 +14,19 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <receiver android:name=".navigation.RemoteControlReceiver">
-            <intent-filter>
+            <intent-filter android:priority="10001">
                 <action android:name="android.intent.action.MEDIA_BUTTON" />
             </intent-filter>
         </receiver>
+
+        <receiver android:name=".MainRemoteControlReceiver">
+            <intent-filter android:priority="10000">
+                <action android:name="android.intent.action.MEDIA_BUTTON" />
+            </intent-filter>
+        </receiver>
+
         <activity
-            android:name="eu.snigle.corsaire.MainActivity"
+            android:name=".MainActivity"
             android:launchMode="singleTask">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -28,7 +35,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="eu.snigle.corsaire.settings.MainSettingsActivity"
+            android:name=".settings.MainSettingsActivity"
             android:label="@string/parametres"
             android:launchMode="singleTask" />
 
@@ -37,42 +44,42 @@
             android:value="AIzaSyB6Tnnp4ZOYZUPuQYZ2v2t4Jt4IQhxVBcc" />
 
         <activity
-            android:name="eu.snigle.corsaire.proximite.CategoriesActivity"
-            android:label="@string/liste_categories"
-             />
-
+            android:name=".proximite.CategoriesActivity"
+            android:label="@string/liste_categories" />
         <activity
-            android:name="eu.snigle.corsaire.proximite.SelectPlaceActivity"
-            android:label="@string/etablissements"
-             />
+            android:name=".proximite.SelectPlaceActivity"
+            android:label="@string/etablissements" />
 
         <service
-            android:name="eu.snigle.corsaire.navigation.NavigationService"
+            android:name=".navigation.NavigationService"
             android:enabled="true"
             android:exported="true"
-            android:stopWithTask="false"/>
+            android:stopWithTask="false" />
 
-        <activity android:name="eu.snigle.corsaire.navigation.NavigationActivity"
-            android:launchMode="singleTop"
+        <activity
+            android:name=".navigation.NavigationActivity"
             android:label="@string/navigation"
-            android:parentActivityName="eu.snigle.corsaire.MainActivity"
-            >
+            android:launchMode="singleTop"
+            android:parentActivityName=".MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="eu.snigle.corsaire.MainActivity" />
-
         </activity>
-
-        <activity android:name="eu.snigle.corsaire.itinerary.details.DetailsActivity"
-            android:launchMode="singleTask"
+        <activity
+            android:name=".itinerary.details.DetailsActivity"
             android:label="@string/details_itineraire"
-            android:parentActivityName="eu.snigle.corsaire.navigation.NavigationActivity"
-            >
+            android:launchMode="singleTask"
+            android:parentActivityName=".navigation.NavigationActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="eu.snigle.corsaire.navigation.NavigationActivity" />
-
         </activity>
+
+        <service
+            android:name=".MyAddressService"
+            android:enabled="true"
+            android:exported="true"
+            android:stopWithTask="false"></service>
     </application>
 
 </manifest>

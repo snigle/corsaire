@@ -10,6 +10,7 @@ import android.location.Geocoder;
 import android.location.Location;
 import android.os.AsyncTask;
 import android.preference.PreferenceManager;
+import android.speech.tts.TextToSpeech;
 import android.support.v4.app.ActivityCompat;
 import android.util.Log;
 import android.widget.Toast;
@@ -30,6 +31,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.text.NumberFormat;
 import java.util.List;
 import java.util.Locale;
 import java.util.regex.Pattern;
@@ -60,7 +62,7 @@ public class ItineraryHelper {
         this.callback = callback;
     }
 
-    public void getMyAddress(){
+    public void getMyAddress(final TextToSpeech mTts, final Double bearing){
         if (mGoogleApiClient.isConnected() && !gettingAddress) {
 
             if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
@@ -74,6 +76,7 @@ public class ItineraryHelper {
                 new AsyncTask<Void,Void,Address>(){
 
                     private int error = 0;
+                    private Float angle;
                     @Override
                     protected Address doInBackground(Void... params) {
                         gettingAddress = true;
@@ -82,6 +85,22 @@ public class ItineraryHelper {
                             if (geocode != null && geocode.size() > 0) {
                                 //Take nearest geocode result
                                 Address returnedArrivalAddress = geocode.get(0);
+                                if(returnedArrivalAddress.getSubThoroughfare() != null) {
+                                    try {
+                                        int streetNumber = Integer.parseInt(returnedArrivalAddress.getSubThoroughfare());
+                                        Address after = geocoder.getFromLocationName(returnedArrivalAddress.getAddressLine(0).replace(returnedArrivalAddress.getSubThoroughfare(), String.valueOf(streetNumber + 2))+" "+returnedArrivalAddress.getLocality()+" "+returnedArrivalAddress.getCountryName(), 1).get(0);
+                                        Location afterLocation = new Location("");
+                                        afterLocation.setLatitude(after.getLatitude());
+                                        afterLocation.setLongitude(after.getLongitude());
+                                        angle = mLastLocation.bearingTo(afterLocation);
+                                        Log.i(TAG,"next : "+after.getAddressLine(0)+" "+after.getLocality());
+                                        if (returnedArrivalAddress.getAddressLine(0) != null)
+                                        Log.i(TAG, streetNumber+" - toto - "+returnedArrivalAddress.getAddressLine(0).replace(returnedArrivalAddress.getSubThoroughfare(), String.valueOf(streetNumber+1)));
+                                    }catch (NumberFormatException e){ Log.i(TAG, "streetNumber NaN"); }
+                                }
+                                else
+                                Log.i(TAG,"null");
+//                                geocoder.getFromLocationName(returnedArrivalAddress.,1)
                                 return returnedArrivalAddress;
                             } else {
                                 error = R.string.adresse_introuvable;
@@ -96,10 +115,14 @@ public class ItineraryHelper {
                     @Override
                     protected void onPostExecute(Address returnedArrivalAddress) {
                         gettingAddress= false;
-                        if(returnedArrivalAddress != null)
-                            Toast.makeText(context,context.getString(R.string.vous_vous_trouvez_ici)+" "+returnedArrivalAddress.getAddressLine(0)+" "+returnedArrivalAddress.getLocality(),Toast.LENGTH_SHORT).show();
+                        if(returnedArrivalAddress != null) {
+                            String speech = context.getString(R.string.vous_vous_trouvez_ici)+" "+returnedArrivalAddress.getAddressLine(0)+" "+returnedArrivalAddress.getLocality()+". "+context.getString(R.string.precision)+" "+Math.round(mLastLocation.getAccuracy())+"m";
+                            if(angle != null && bearing != null)
+                                speech = speech + ". " + getDirection(bearing, angle);
+                            speak(mTts, speech);
+                        }
                         else if(error>0){
-                            Toast.makeText(context, context.getString(error), Toast.LENGTH_LONG).show();
+                            speak(mTts, context.getString(error));
                         }
                     }
                 }.execute();
@@ -108,6 +131,30 @@ public class ItineraryHelper {
                 Toast.makeText(context, context.getString(R.string.erreur_localisation), Toast.LENGTH_LONG).show();
         } else {
             Toast.makeText(context, context.getString(R.string.erreur_localisation), Toast.LENGTH_LONG).show();
+        }
+    }
+
+    private double normalize(double a){
+        return (360 + (a % 360)) % 360;
+    }
+    private boolean isBetween(double b, double b1, double b2) {
+        if(b1 < b2){
+            return(b1 <= b && b <= b2);
+        }
+        return (b1 <= b || b <= b2);
+    }
+
+    private String getDirection(Double bearing, Float angle) {
+        Log.i(TAG,bearing + " " + angle);
+        boolean res = true;
+        double[] front = {normalize(bearing-90),normalize(bearing+90)};
+
+        double b = normalize(angle);
+
+        if(isBetween(b,front[0],front[1])){
+            return context.getString(R.string.croissant);
+        } else {
+            return context.getString(R.string.decroissant);
         }
     }
 
@@ -309,5 +356,13 @@ public class ItineraryHelper {
         editor.putString(context.getString(R.string.saved_itinerary_key), itinerary.json);
         editor.putString(context.getString(R.string.saved_itinerary_name_key), itinerary.name);
         editor.commit();
+    }
+
+    public void speak(TextToSpeech mTts, String speech) {
+        if(mTts == null){
+            Toast.makeText(context, speech, Toast.LENGTH_SHORT).show();
+        } else {
+            mTts.speak(speech, TextToSpeech.QUEUE_ADD, null);
+        }
     }
 }

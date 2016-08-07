@@ -59,4 +59,9 @@
     <string name="jusqua_larret">to the stop</string>
     <string name="prendre_le">take the</string>
     <string name="et">and</string>
+    <string name="croissant">orden creciente</string>
+    <string name="decroissant"> orden descendente</string>
+    <string name="gps_found">GPS singal ok</string>
+    <string name="gps_lost">GPS signal lost</string>
+    <string name="precision">accuracy</string>
 </resources>
