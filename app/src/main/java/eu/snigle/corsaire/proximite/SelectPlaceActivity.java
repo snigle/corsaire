@@ -54,20 +54,6 @@ public class SelectPlaceActivity extends AppCompatActivity implements OnMapReady
     private boolean isExploreByTouchEnabled = false;
     private Marker selectedMarker = null;
 
-    private class Adapter extends SimpleAdapter{
-        public Adapter(Context context,
-                                     List<? extends Map<String, ?>> data, int resource, String[] from,
-                                     int[] to) {
-            super(context, data, resource, from, to);
-        }
-
-        public View getView(int position, View convertView, ViewGroup parent) {
-            LinearLayout myView = (LinearLayout) super.getView(position, convertView, parent);
-            myView.setContentDescription(((TextView) myView.findViewById(R.id.name)).getText());
-            return myView;
-        }
-    }
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -106,9 +92,7 @@ public class SelectPlaceActivity extends AppCompatActivity implements OnMapReady
                 map.put("distance",Math.round(place.location.distanceTo(location)) + "m");
                 data.add(map);
             }
-//            ArrayAdapter adapter = new ArrayAdapter(this,
-//                    android.R.layout.simple_list_item_1, data.toArray());
-            SimpleAdapter adapter = new Adapter(this,data,R.layout.list_view_select_place, new String[]{"name","distance"}, new int[]{R.id.name,R.id.distance});
+            SimpleAdapter adapter = new SimpleAdapter(this,data,R.layout.list_view_select_place, new String[]{"name","distance"}, new int[]{R.id.name,R.id.distance});
 
 
             ListView listView = (ListView) findViewById(R.id.listView);
