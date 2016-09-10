@@ -23,6 +23,12 @@
             android:summary="@string/pref_vibrate_summ"
             android:defaultValue="true" />
 
+        <CheckBoxPreference
+            android:key="@string/pref_sortByPopularity"
+            android:title="@string/pref_sortByPopularity_title"
+            android:summary="@string/pref_sortByPopularity_summ"
+            android:defaultValue="true" />
+
 
     </PreferenceCategory>
 

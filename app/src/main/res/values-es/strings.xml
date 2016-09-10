@@ -64,4 +64,6 @@
     <string name="precision">precisión</string>
     <string name="gps_lost">Señal GPS perdió</string>
     <string name="gps_found">Señal GPS encontró</string>
+    <string name="pref_sortByPopularity_summ">Ordenar propiedades por su popularidad (activado) o por distancia (desactivada)</string>
+    <string name="pref_sortByPopularity_title">Ordenar propiedades por su popularidad</string>
 </resources>

@@ -88,14 +88,18 @@ public class ItineraryHelper {
                                 if(returnedArrivalAddress.getSubThoroughfare() != null) {
                                     try {
                                         int streetNumber = Integer.parseInt(returnedArrivalAddress.getSubThoroughfare());
-                                        Address after = geocoder.getFromLocationName(returnedArrivalAddress.getAddressLine(0).replace(returnedArrivalAddress.getSubThoroughfare(), String.valueOf(streetNumber + 2))+" "+returnedArrivalAddress.getLocality()+" "+returnedArrivalAddress.getCountryName(), 1).get(0);
-                                        Location afterLocation = new Location("");
-                                        afterLocation.setLatitude(after.getLatitude());
-                                        afterLocation.setLongitude(after.getLongitude());
-                                        angle = mLastLocation.bearingTo(afterLocation);
-                                        Log.i(TAG,"next : "+after.getAddressLine(0)+" "+after.getLocality());
-                                        if (returnedArrivalAddress.getAddressLine(0) != null)
-                                        Log.i(TAG, streetNumber+" - toto - "+returnedArrivalAddress.getAddressLine(0).replace(returnedArrivalAddress.getSubThoroughfare(), String.valueOf(streetNumber+1)));
+                                        List<Address> geocodeAfter = geocoder.getFromLocationName(returnedArrivalAddress.getAddressLine(0).replace(returnedArrivalAddress.getSubThoroughfare(), String.valueOf(streetNumber + 2)) + " " + returnedArrivalAddress.getLocality() + " " + returnedArrivalAddress.getCountryName(), 1);
+                                        if (geocodeAfter.size() > 0) {
+                                            Address after = geocodeAfter.get(0);
+                                            Location afterLocation = new Location("");
+                                            afterLocation.setLatitude(after.getLatitude());
+                                            afterLocation.setLongitude(after.getLongitude());
+                                            angle = mLastLocation.bearingTo(afterLocation);
+                                            Log.i(TAG,"next : "+after.getAddressLine(0)+" "+after.getLocality());
+                                            if (returnedArrivalAddress.getAddressLine(0) != null)
+                                                Log.i(TAG, streetNumber+" - toto - "+returnedArrivalAddress.getAddressLine(0).replace(returnedArrivalAddress.getSubThoroughfare(), String.valueOf(streetNumber+1)));
+
+                                        }
                                     }catch (NumberFormatException e){ Log.i(TAG, "streetNumber NaN"); }
                                 }
                                 else

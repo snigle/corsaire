@@ -1,7 +1,9 @@
 package eu.snigle.corsaire.proximite;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -115,7 +117,13 @@ public class CategoriesActivity extends AppCompatActivity {
         url += "location=" + position.latitude + "," + position.longitude;
 
         url += "&language=" + Locale.getDefault().getLanguage();
-        url += "&rankby=distance";
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        boolean sortByPopularity = sharedPref.getBoolean(getString(R.string.pref_sortByPopularity), true);
+        if(sortByPopularity) {
+            url += "&radius=1000";
+        } else {
+            url += "&rankby=distance";
+        }
         try {
             url += "&key="+getPackageManager().getApplicationInfo(getPackageName(), PackageManager.GET_META_DATA).metaData.getString("com.google.android.geo.API_KEY");
         } catch (PackageManager.NameNotFoundException e) {
