@@ -64,6 +64,9 @@
     <string name="gps_found">GPS singal ok</string>
     <string name="gps_lost">GPS signal lost</string>
     <string name="precision">accuracy</string>
-    <string name="pref_sortByPopularity_summ">Sort places by popularity (checked) or by distance (unchecked)</string>
-    <string name="pref_sortByPopularity_title">Sort places by popularity</string>
+    <string name="pref_sortByPopularity_title">Sort places</string>
+    <string name="sante">Health</string>
+    <string name="hotel">Hotel</string>
+    <string name="sortByDistance">Sort by distance</string>
+    <string name="sortByPopularity">Sort by popularity</string>
 </resources>

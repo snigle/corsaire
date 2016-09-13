@@ -23,22 +23,21 @@
             android:summary="@string/pref_vibrate_summ"
             android:defaultValue="true" />
 
-        <CheckBoxPreference
-            android:key="@string/pref_sortByPopularity"
-            android:title="@string/pref_sortByPopularity_title"
-            android:summary="@string/pref_sortByPopularity_summ"
-            android:defaultValue="true" />
-
 
     </PreferenceCategory>
 
+    <PreferenceCategory
+        android:title="@string/recherche_proximite"
+        android:key="pref_around_me_settings">
 
-    <!--<ListPreference-->
-        <!--android:dependency="pref_sync"-->
-        <!--android:key="pref_syncConnectionType"-->
-        <!--android:title="@string/pref_syncConnectionType"-->
-        <!--android:dialogTitle="@string/pref_syncConnectionType"-->
-        <!--android:entries="@array/pref_syncConnectionTypes_entries"-->
-        <!--android:entryValues="@array/pref_syncConnectionTypes_values"-->
-        <!--android:defaultValue="@string/pref_syncConnectionTypes_default" />-->
+        <ListPreference
+            android:key="@string/pref_sortByPopularity"
+            android:title="@string/pref_sortByPopularity_title"
+            android:dialogTitle="@string/pref_sortByPopularity_title"
+            android:entries="@array/pref_activated_entries"
+            android:entryValues="@array/pref_activated_entries_values"
+            android:defaultValue="true" />
+
+    </PreferenceCategory>
+
 </PreferenceScreen>

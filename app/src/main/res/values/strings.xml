@@ -71,8 +71,14 @@
     <string name="precision">précision</string>
     <string name="croissant">sens croissant</string>
     <string name="decroissant">sens décroissant</string>
-    <string name="pref_sortByPopularity" translatable="false">pref_sortByPopularity</string>
-    <string name="pref_sortByPopularity_title">Trier les établissements par popularité</string>
-    <string name="pref_sortByPopularity_summ">Trie les établissements par popularité (coché)  ou par distance (décoché).</string>
+    <string name="pref_sortByPopularity" translatable="false">pref_sortByPopularityString</string>
+    <string name="pref_sortByPopularity_title">Trier les établissements</string>
+    <string name="hotel">Hotel</string>
+    <string name="sante">Santé</string>
+    <string name="sortByPopularity">Trier par popularité</string>
+    <string name="sortByDistance">Trier par distance</string>
+    <string name="pref_sort_popularity" translatable="false">pref_sort_popularity</string>
+    <string name="pref_sort_distance" translatable="false">pref_sort_distance</string>
+
 
 </resources>

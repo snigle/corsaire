@@ -118,7 +118,7 @@ public class CategoriesActivity extends AppCompatActivity {
 
         url += "&language=" + Locale.getDefault().getLanguage();
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-        boolean sortByPopularity = sharedPref.getBoolean(getString(R.string.pref_sortByPopularity), true);
+        boolean sortByPopularity = sharedPref.getString(getString(R.string.pref_sortByPopularity), getString(R.string.pref_sort_popularity)).equals(getString(R.string.pref_sort_popularity));
         if(sortByPopularity) {
             url += "&radius=1000";
         } else {
@@ -202,15 +202,22 @@ public class CategoriesActivity extends AppCompatActivity {
                         add("atm");
                     }
                 });
-                put(getString(R.string.pharmacie), new ArrayList<String>() {
+                put(getString(R.string.sante), new ArrayList<String>() {
                     {
                         add("pharmacy");
-                        add("museum");
+                        add("hospital");
+                        add("dentist");
+                        add("doctor");
                     }
                 });
                 put(getString(R.string.restaurant), new ArrayList<String>() {
                     {
                         add("restaurant");
+                    }
+                });
+                put(getString(R.string.hotel), new ArrayList<String>() {
+                    {
+                        add("lodging");
                     }
                 });
                 put(getString(R.string.supermarche), new ArrayList<String>() {
@@ -260,11 +267,12 @@ public class CategoriesActivity extends AppCompatActivity {
                 put(getString(R.string.coiffeur),R.drawable.barberchair);
                 put(getString(R.string.culture),R.drawable.lyre);
                 put(getString(R.string.atm),R.drawable.bankcards);
-                put(getString(R.string.pharmacie),R.drawable.doctorsbag);
+                put(getString(R.string.sante),R.drawable.doctorsbag);
                 put(getString(R.string.restaurant),R.drawable.restaurant);
                 put(getString(R.string.shopping),R.drawable.europricetag);
                 put(getString(R.string.supermarche),R.drawable.shoppingcart);
                 put(getString(R.string.transport),R.drawable.shuttle);
+                put(getString(R.string.hotel),R.drawable.ic_hotel_black_48dp_green);
             }
         };
 
