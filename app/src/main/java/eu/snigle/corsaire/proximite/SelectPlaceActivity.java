@@ -97,7 +97,6 @@ public class SelectPlaceActivity extends AppCompatActivity implements OnMapReady
 
             ListView listView = (ListView) findViewById(R.id.listView);
             listView.setAdapter(adapter);
-            listView.setClickable(true);
 
             listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
