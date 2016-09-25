@@ -2,14 +2,11 @@ package eu.snigle.corsaire;
 
 import android.Manifest;
 import android.content.ActivityNotFoundException;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
-import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.Location;
-import android.os.IBinder;
 import android.preference.PreferenceManager;
 import android.speech.RecognizerIntent;
 import android.support.annotation.NonNull;
@@ -23,10 +20,13 @@ import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.accessibility.AccessibilityManager;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -34,7 +34,6 @@ import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.LocationSettingsRequest;
@@ -62,6 +61,8 @@ import eu.snigle.corsaire.itinerary.ItineraryCallback;
 import eu.snigle.corsaire.itinerary.ItineraryHelper;
 import eu.snigle.corsaire.itinerary.details.DetailsActivity;
 import eu.snigle.corsaire.itinerary.details.DetailsFragment;
+import eu.snigle.corsaire.itinerary.favorite.Favorite;
+import eu.snigle.corsaire.itinerary.favorite.FavoriteHelper;
 import eu.snigle.corsaire.navigation.NavigationActivity;
 import eu.snigle.corsaire.navigation.NavigationService;
 import eu.snigle.corsaire.proximite.CategoriesActivity;
@@ -77,7 +78,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     private static final int REQ_PROXIMITE = 2;
     private GoogleApiClient mGoogleApiClient;
     private ItineraryHelper itineraryHelper;
-    private EditText searchText;
+    private AutoCompleteTextView searchText;
     private GoogleMap mMap;
     private Polyline polyline;
     private Marker markerDepart;
@@ -86,6 +87,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     private TextView infodistance;
     private boolean isExploreByTouchEnabled;
     private DetailsFragment detailsFragment;
+    private FavoriteHelper favorite;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -99,6 +101,8 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             setContentView(R.layout.activity_main_talkback);
         else
             setContentView(R.layout.activity_main);
+
+        favorite = new FavoriteHelper(this);
 
         Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
         myToolbar.setLogo(R.drawable.ic_launcher);
@@ -123,7 +127,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             itineraryHelper = new ItineraryHelper(mGoogleApiClient, getApplicationContext(), this);
 
             infodistance = (TextView) findViewById(R.id.info_distance);
-            searchText = (EditText) findViewById(R.id.visual_search);
+            searchText = (AutoCompleteTextView) findViewById(R.id.visual_search);
             searchText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
                 @Override
                 public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
@@ -135,19 +139,41 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                     return true;
                 }
             });
+            updateFavorites();
+            searchText.setOnTouchListener(new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
+                    searchText.showDropDown();
+                    return false;
+                }
+            });
 
 
         }
 
     }
 
+    public void updateFavorites() {
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
+                android.R.layout.simple_dropdown_item_1line, favorite.getFavoriteKeys().toArray(new String[0]));
+        searchText.setAdapter(adapter);
+    }
+
     public void search(View view) {
+        //Select text to remove replace easily for new input
         View v = this.getCurrentFocus();
         if (v != null) {
             InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
             imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
         }
-        itineraryHelper.calculateItineraryWithGeocoding(((EditText) findViewById(R.id.visual_search)).getText().toString());
+        Log.i(TAG, "check favorite of " + searchText.getText());
+        Log.i(TAG, "check favorite of " + favorite.getFavorites());
+        Log.i(TAG, String.valueOf(favorite.getFavorites().containsKey("Laffineur Olivier")));
+        if (favorite.getFavorites().containsKey(searchText.getText().toString())){
+            itineraryHelper.getItineraryFromFavorite(favorite.getFavorites().get(searchText.getText().toString()));
+        } else {
+            itineraryHelper.calculateItineraryWithGeocoding(searchText.getText().toString());
+        }
     }
 
     @Override
@@ -456,4 +482,17 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         startActivity(intent);
     }
 
+    public void addToFavorite(View view) {
+        if (favorite == null || itinerary == null) {
+            return;
+        }
+        if (itinerary.getDest() != null) {
+            favorite.add(itinerary.name, itinerary.getDest());
+            updateFavorites();
+        } else {
+            Toast.makeText(this, R.string.calcul_itineraire, Toast.LENGTH_LONG);
+        }
+    }
+
+    //TODO put favorite button on the map, create a function to update this image button (add or remove favorite)
 }

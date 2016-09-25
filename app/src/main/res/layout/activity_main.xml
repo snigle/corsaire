@@ -19,7 +19,7 @@
         android:focusableInTouchMode="true"
         >
         </android.support.v7.widget.Toolbar>
-    <EditText
+    <AutoCompleteTextView
         android:id="@+id/visual_search"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -32,6 +32,7 @@
         android:selectAllOnFocus="true"
         android:singleLine="true"
         android:textColor="@color/colorPrimary"
+        android:completionThreshold="1"
 
         android:layout_marginLeft="2dp"
         android:layout_alignParentStart="true"
@@ -94,7 +95,7 @@
             android:layout_alignTop="@+id/button"
             android:layout_weight="1"
             android:clickable="true"
-            android:onClick="rechercheVocale"
+            android:onClick="addToFavorite"
             android:contentDescription="@string/recherche_vocale"
             android:layout_marginLeft="5dp">
 

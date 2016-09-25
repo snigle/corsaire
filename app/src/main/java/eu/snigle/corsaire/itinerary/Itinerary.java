@@ -14,6 +14,7 @@ import java.util.LinkedList;
 import eu.snigle.corsaire.itinerary.details.Step;
 import eu.snigle.corsaire.itinerary.details.TransitStep;
 import eu.snigle.corsaire.itinerary.details.WalkingStep;
+import eu.snigle.corsaire.itinerary.favorite.Favorite;
 
 /**
  * Created by lamarchelu on 03/05/16.
