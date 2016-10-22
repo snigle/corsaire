@@ -35,7 +35,7 @@
             android:clickable="true"
             android:onClick="toggleBus" />
 
-        <EditText
+        <AutoCompleteTextView
             android:id="@+id/visual_search"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -91,7 +91,8 @@
             android:text="@string/choisir_destination"
             android:layout_weight="1"
             android:layout_margin="5dp"
-            android:clickable="false" />
+            android:clickable="false"
+             />
 
         <Button
             android:layout_width="match_parent"
@@ -101,6 +102,30 @@
             android:layout_margin="5dp"
             android:clickable="true"
             android:onClick="details" />
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="@string/add_favorite"
+            android:layout_weight="1"
+            android:layout_margin="5dp"
+            android:clickable="true"
+            android:onClick="addToFavorite"
+            android:id="@+id/favorite_button_add"
+            android:nestedScrollingEnabled="false"
+            android:visibility="gone"/>
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="@string/remove_favorite"
+            android:layout_weight="1"
+            android:layout_margin="5dp"
+            android:clickable="true"
+            android:onClick="addToFavorite"
+            android:id="@+id/favorite_button_remove"
+            android:nestedScrollingEnabled="false"
+            android:visibility="gone"/>
 
         <Button
             android:layout_width="match_parent"

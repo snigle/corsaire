@@ -127,7 +127,8 @@
                     android:layout_alignParentEnd="true"
                     android:layout_gravity="center_vertical"
                     android:textColor="#FFFFFF"
-                    android:text="@string/recherche_vocale" />
+                    android:text="@string/recherche_vocale"
+                    android:onClick="rechercheVocale" />
             </LinearLayout>
 
         </LinearLayout>
@@ -159,42 +160,53 @@
         android:contentDescription="@string/search"
         android:onClick="search" />
 
-    <RelativeLayout
+    <LinearLayout
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentLeft="true"
         android:id="@+id/layout_info"
-        android:visibility="invisible"
-        android:background="@color/white">
+        android:background="@color/white"
+        android:layout_alignParentBottom="true"
+        android:layout_alignLeft="@+id/linearLayout"
+        android:layout_alignStart="@+id/linearLayout"
+        android:visibility="invisible">
+
+        <ImageButton
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:id="@+id/favorite_button_remove"
+            android:src="@drawable/ic_star_white_36dp"
+            android:layout_margin="5dp"
+            android:onClick="addToFavorite"
+            android:background="@drawable/button"
+            android:visibility="gone"
+            />
+        <ImageButton
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:id="@+id/favorite_button_add"
+            android:src="@drawable/ic_star_border_white_36dp"
+            android:layout_margin="5dp"
+            android:onClick="addToFavorite"
+            android:background="@drawable/button"
+            android:visibility="gone"
+            />
 
         <TextView
             android:id="@+id/info_distance"
-            android:layout_width="match_parent"
+            android:layout_width="253dp"
             android:layout_height="match_parent"
             android:clickable="true"
             android:gravity="center"
-            android:importantForAccessibility="yes"
             android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
             android:textColor="@color/colorAccent"
             android:text="@string/choisir_destination"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:layout_toLeftOf="@+id/button2"
-            android:layout_toStartOf="@+id/button2"
-            android:layout_weight="1" />
+            android:layout_weight="30" />
 
         <ImageButton
             android:id="@+id/button2"
             android:layout_width="40dp"
             android:layout_height="40dp"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentRight="true"
             android:text="Commencer la navigation"
             android:clickable="true"
             android:onClick="naviguer"
@@ -203,6 +215,6 @@
             android:layout_weight="1"
             android:layout_margin="5dp"
             android:background="@drawable/button" />
-    </RelativeLayout>
+    </LinearLayout>
 
 </RelativeLayout>

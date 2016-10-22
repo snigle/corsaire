@@ -80,6 +80,10 @@
     <string name="pref_sort_popularity" translatable="false">pref_sort_popularity</string>
     <string name="pref_sort_distance" translatable="false">pref_sort_distance</string>
     <string name="preference_favorite_key">pref_favorite_key</string>
+    <string name="favorite_deleted" >Le lieu a été retiré des favoris</string>
+    <string name="favorite_added">Le lieu a été ajouté aux favoris</string>
+    <string name="add_favorite">Ajouter la destination aux favoris</string>
+    <string name="remove_favorite">Supprimer la destination des favoris</string>
 
 
 </resources>

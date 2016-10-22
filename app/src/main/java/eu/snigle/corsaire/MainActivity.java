@@ -25,6 +25,7 @@ import android.view.View;
 import android.view.accessibility.AccessibilityManager;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.CheckBox;
@@ -147,16 +148,33 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                     return false;
                 }
             });
-
+            searchText.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    search(null);
+                }
+            });
 
         }
 
     }
 
     public void updateFavorites() {
+        if (favorite == null) {
+            return;
+        }
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
                 android.R.layout.simple_dropdown_item_1line, favorite.getFavoriteKeys().toArray(new String[0]));
         searchText.setAdapter(adapter);
+        if (itinerary != null && itinerary.getDest() != null) {
+            if (favorite.getFavoriteKeys().contains(itinerary.name)) {
+                findViewById(R.id.favorite_button_add).setVisibility(View.GONE);
+                findViewById(R.id.favorite_button_remove).setVisibility(View.VISIBLE);
+            } else {
+                findViewById(R.id.favorite_button_add).setVisibility(View.VISIBLE);
+                findViewById(R.id.favorite_button_remove).setVisibility(View.GONE);
+            }
+        }
     }
 
     public void search(View view) {
@@ -332,7 +350,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         searchText.clearFocus();
         this.itinerary = itinerary;
-
+        updateFavorites();
         //Log.i(TAG,itinerary.getGPX());
     }
 
@@ -487,12 +505,19 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             return;
         }
         if (itinerary.getDest() != null) {
-            favorite.add(itinerary.name, itinerary.getDest());
+            if(favorite.getFavoriteKeys().contains(itinerary.name)){
+                //Delete favorite
+                favorite.delete(itinerary.name);
+                Toast.makeText(this, R.string.favorite_deleted, Toast.LENGTH_LONG).show();
+            } else {
+                //Add favorite
+                favorite.add(itinerary.name, itinerary.getDest());
+                Toast.makeText(this, R.string.favorite_added, Toast.LENGTH_LONG).show();
+            }
             updateFavorites();
         } else {
-            Toast.makeText(this, R.string.calcul_itineraire, Toast.LENGTH_LONG);
+            Toast.makeText(this, R.string.calcul_itineraire, Toast.LENGTH_LONG).show();
         }
     }
 
-    //TODO put favorite button on the map, create a function to update this image button (add or remove favorite)
 }
