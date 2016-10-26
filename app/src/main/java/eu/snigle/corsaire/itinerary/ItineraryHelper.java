@@ -37,6 +37,7 @@ import java.util.Locale;
 import java.util.regex.Pattern;
 
 import eu.snigle.corsaire.R;
+import eu.snigle.corsaire.itinerary.favorite.Favorite;
 import eu.snigle.corsaire.proximite.CategoriesActivity;
 import eu.snigle.corsaire.proximite.SelectPlaceActivity;
 
@@ -368,5 +369,15 @@ public class ItineraryHelper {
         } else {
             mTts.speak(speech, TextToSpeech.QUEUE_ADD, null);
         }
+    }
+
+    public void getItineraryFromFavorite(Favorite favorite) {
+        Log.i(TAG, "calculate from favorite");
+        if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            Toast.makeText(context, context.getString(R.string.erreur_autorisation), Toast.LENGTH_LONG).show();
+            return;
+        }
+        final Location mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
+        getItinerary(favorite.name, new LatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude()), new LatLng(favorite.lat, favorite.lng));
     }
 }
